@@ -1,8 +1,8 @@
-extern crate regex;
+extern crate fancy_regex;
 // #[macro_use]
 extern crate stdweb;
 
-use regex::Regex;
+use fancy_regex::Regex;
 use std::fmt::Write;
 
 use stdweb::traits::*;
@@ -94,14 +94,14 @@ fn run_regex(pattern_input: TextAreaElement, subject_input: TextAreaElement, out
     output_pre.set_text_content(&formatted);
 }
 
-fn format_captures(regex: regex::Regex, subject: &str) -> String {
+fn format_captures(regex: Regex, subject: &str) -> String {
     let mut buffer = String::new();
 
     for captures in regex.captures_iter(subject) {
         write!(&mut buffer, "Some(Captures({{\n").unwrap();
 
         for (i, cap) in captures.iter().enumerate() {
-            write!(&mut buffer, "    {}: Some({:?}),\n", i, cap.unwrap().as_str()).unwrap();
+            write!(&mut buffer, "    {}: Some({:?}),\n", i, cap).unwrap();
         }
 
         write!(&mut buffer, "}})),\n").unwrap();
@@ -117,7 +117,7 @@ fn format_captures(regex: regex::Regex, subject: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use regex::Regex;
+    use fancy_regex::Regex;
 
     #[test]
     fn test_format_captures_no_matches() {
